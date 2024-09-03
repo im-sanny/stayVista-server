@@ -62,6 +62,7 @@ async function run() {
         })
         .send({ success: true });
     });
+
     // Logout
     app.get("/logout", async (req, res) => {
       try {
@@ -80,13 +81,20 @@ async function run() {
 
     // get all rooms from db
     app.get("/rooms", async (req, res) => {
-      const category =req.query.category
-      let query = {}
-      if (category && category !== 'null') query= {category}
+      const category = req.query.category;
+      let query = {};
+      if (category && category !== "null") query = { category };
       const result = await roomsCollection.find(query).toArray();
       res.send(result);
     });
-    
+
+    // save a rooms data in db
+    app.post("/room", async (req, res) => {
+      const roomData = req.body;
+      const result = await roomsCollection.insertOne(roomData);
+      res.send(result);
+    });
+
     // get a single room data from db using _id
     app.get("/room/:id", async (req, res) => {
       const id = req.params.id;
