@@ -99,8 +99,15 @@ async function run() {
     app.get("/my-listings/:email", async (req, res) => {
       const email = req.params.email;
       let query = { "host.email": email };
-
       const result = await roomsCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // delete a room
+    app.delete("/room/:id", async (req, res) => {
+      const id = req.params.id;
+      let query = { _id: new ObjectId(id)};
+      const result = await roomsCollection.deleteOne(query);
       res.send(result);
     });
 
